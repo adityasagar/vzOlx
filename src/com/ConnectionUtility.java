@@ -6,9 +6,12 @@ public class ConnectionUtility {
 	public static Connection getConnection() {
 		Connection conn = null;
 		try{
-		Class.forName("com.mysql.jdbc.Driver");
-
-conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-02.cleardb.net/ad_05e7fe6bd1f8e1c?user=b70e4174d40ce1&password=12ddc464");}
+			Class.forName("com.mysql.jdbc.Driver");
+	
+			conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-02.cleardb.net/ad_05e7fe6bd1f8e1c?user=b70e4174d40ce1&password=12ddc464");
+			System.out.println("Hello! Connection Established");
+		}
+		
 		catch(Exception e){
 			e.printStackTrace();
 		}
