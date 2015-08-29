@@ -141,4 +141,5 @@ public class ProductServlet extends HttpServlet {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
 }
