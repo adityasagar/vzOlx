@@ -58,7 +58,7 @@ public class ProductUtility {
 	public static void sendEmail(ProductVO product,UserVO buyer,UserVO seller,String msg){
 		String to=seller.getEmail();
 		String from=buyer.getEmail();
-		String host="smtp.verizon.com";
+		String host="smtp.gmail.com";
 		System.out.println(to+" ,"+from);
 		Properties properties = System.getProperties();
 		properties.setProperty("mail.smtp.host", host);
