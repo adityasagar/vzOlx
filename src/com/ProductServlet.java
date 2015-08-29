@@ -43,7 +43,13 @@ public class ProductServlet extends HttpServlet {
 		request.setAttribute("userid",(String)(request.getParameter("userid").trim()));
 		
 		if(type.trim().equalsIgnoreCase("category")){
-		ArrayList<ProductVO> results= ProductUtility.getCategoryResults( value);
+		ArrayList<ProductVO> results = null;
+		try {
+			results = ProductUtility.getCategoryResults( value);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		request.setAttribute("type", type);
 		request.setAttribute("value", value);
 		request.setAttribute("results",results);
@@ -89,7 +95,13 @@ public class ProductServlet extends HttpServlet {
 			newProduct.setReason(request.getParameter("reason")==null?"":(String)request.getParameter("reason"));
 			newProduct.setDescription(request.getParameter("desc")==null?"":(String)request.getParameter("desc"));
 			newProduct.setOwnerId(Long.valueOf(userId));
-			boolean inserted = ProductUtility.productEntry(newProduct);
+			boolean inserted = false;
+			try {
+				inserted = ProductUtility.productEntry(newProduct);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			request.setAttribute("inserted", inserted);
 			request.setAttribute("type", type);
 			request.setAttribute("value", value);
@@ -103,7 +115,13 @@ public class ProductServlet extends HttpServlet {
 			long productid= request.getParameter("productid")==null?0:Long.valueOf(request.getParameter("productid"));
 			long userid=request.getParameter("userid")==null?0:Long.valueOf(request.getParameter("userid"));
 			String message=request.getParameter("message")==null?"":(String)(request.getParameter("message"));
-			ProductVO product=ProductUtility.getProduct(productid);
+			ProductVO product = null;
+			try {
+				product = ProductUtility.getProduct(productid);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			UserVO seller= RegisterUtility.getUser(product.getOwnerId());
 			UserVO buyer= RegisterUtility.getUser(userid);
 			ProductUtility.sendEmail(product, buyer, seller, message);			

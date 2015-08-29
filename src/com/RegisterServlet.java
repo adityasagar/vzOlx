@@ -39,7 +39,13 @@ public class RegisterServlet extends HttpServlet {
 		newUser.setContact((String)request.getParameter("number"));
 		newUser.setPwd((String)request.getParameter("pwd"));	
 		//newUser.setJoiningDate(new java.sql.Date(new java.util.Date()));
-		boolean check=RegisterUtility.signUp(newUser);
+		boolean check = false;
+		try {
+			check = RegisterUtility.signUp(newUser);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(newUser.getName());
 		if(check){
 			/*UserVO fullUser= RegisterUtility.getUserByEmail(newUser.getEmail());
