@@ -116,13 +116,54 @@ public class ProductUtility {
 		ProductVO p = new ProductVO();
 		Connection con=null;
 		PreparedStatement ps=null;
+		ResultSet rs= null;
 		try{
 			con=ConnectionUtility.getConnection();
 			String query="Select * from products where category= ? limit 30";
 			ps= con.prepareStatement(query);
 			ps.setString(1,value);
-			ResultSet rs= ps.executeQuery();
+			rs= ps.executeQuery();
 			while(rs!=null && rs.next()){
+				p.setProductId(rs.getLong("productid"));
+				p.setName(rs.getString("productname"));
+				p.setCategory(rs.getString("category"));
+				p.setHits(rs.getLong("hits"));
+				p.setPrice(rs.getFloat("price"));
+				p.setOwnerId(rs.getLong("ownerid"));
+				p.setSoldTo(rs.getLong("soldto"));
+				p.setDescription(rs.getString("description"));
+				p.setReason(rs.getString("reason"));
+				p.setBuyDate(rs.getDate("buydate"));
+				p.setSellDate(rs.getDate("selldate"));
+				p.setImageLink(rs.getString("imagelink"));
+				results.add(p);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			rs.close();
+			ps.close();
+			con.close();
+		}
+			return results;
+	}
+	
+	public static ArrayList<ProductVO> getSearchResults( String value) throws Exception{
+		ArrayList<ProductVO> results= new ArrayList<ProductVO>();
+
+		value="%"+value+"%";
+		Connection con=null;
+		PreparedStatement ps= null;
+		ResultSet rs= null;
+		try{
+			con=ConnectionUtility.getConnection();
+			String query="Select * from products where productname like ? limit 30";
+			ps= con.prepareStatement(query);
+			ps.setString(1,value);
+			rs= ps.executeQuery();
+			while(rs!=null && rs.next()){
+				ProductVO p = new ProductVO();
 				p.setProductId(rs.getLong("productid"));
 				p.setName(rs.getString("productname"));
 				p.setCategory(rs.getString("category"));
@@ -143,56 +184,24 @@ public class ProductUtility {
 		catch(Exception e){
 			e.printStackTrace();
 		}finally{
+			rs.close();
 			ps.close();
 			con.close();
 		}
-			return results;
-	}
-	
-	public static ArrayList<ProductVO> getSearchResults( String value){
-		ArrayList<ProductVO> results= new ArrayList<ProductVO>();
-
-		value="%"+value+"%";
-		try{
-			Connection con=ConnectionUtility.getConnection();
-			String query="Select * from products where productname like ? limit 30";
-			PreparedStatement ps= con.prepareStatement(query);
-			ps.setString(1,value);
-			ResultSet rs= ps.executeQuery();
-			while(rs!=null && rs.next()){
-				ProductVO p = new ProductVO();
-				p.setProductId(rs.getLong("productid"));
-				p.setName(rs.getString("productname"));
-				p.setCategory(rs.getString("category"));
-				p.setHits(rs.getLong("hits"));
-				p.setPrice(rs.getFloat("price"));
-				p.setOwnerId(rs.getLong("ownerid"));
-				p.setSoldTo(rs.getLong("soldto"));
-				p.setDescription(rs.getString("description"));
-				p.setReason(rs.getString("reason"));
-				p.setBuyDate(rs.getDate("buydate"));
-				p.setSellDate(rs.getDate("selldate"));
-				p.setImageLink(rs.getString("imagelink"));
-				results.add(p);
-			}
-			
-			
-		}
-catch(Exception e){
-	e.printStackTrace();
-}
 		return results;
 	}
-	public static ArrayList<ProductVO> getMostViewedResults( String value){
+	public static ArrayList<ProductVO> getMostViewedResults( String value) throws Exception{
 		ArrayList<ProductVO> results= new ArrayList<ProductVO>();
-
+		Connection con=null;
+		PreparedStatement ps= null;
+		ResultSet rs=null;
 		//value="%"+value+"%";
 		try{
-			Connection con=ConnectionUtility.getConnection();
+			con=ConnectionUtility.getConnection();
 			String query="Select * from products order by hits desc limit ? ";
-			PreparedStatement ps= con.prepareStatement(query);
+			ps= con.prepareStatement(query);
 			ps.setInt(1,Integer.parseInt(value));
-			ResultSet rs= ps.executeQuery();
+			rs= ps.executeQuery();
 			while(rs!=null && rs.next()){
 				ProductVO p = new ProductVO();
 				p.setName(rs.getString("productname"));
@@ -211,21 +220,27 @@ catch(Exception e){
 			
 			
 		}
-catch(Exception e){
-	e.printStackTrace();
-}
+		catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			rs.close();
+			ps.close();
+			con.close();
+		}
 		return results;
 	}
-	public static ArrayList<ProductVO> getRecentResults( String value){
+	public static ArrayList<ProductVO> getRecentResults( String value) throws Exception{
 		ArrayList<ProductVO> results= new ArrayList<ProductVO>();
-
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs= null;
 		//value="%"+value+"%";
 		try{
-			Connection con=ConnectionUtility.getConnection();
+			con=ConnectionUtility.getConnection();
 			String query="Select * from products order by buyDate desc limit ? ";
-			PreparedStatement ps= con.prepareStatement(query);
+			ps= con.prepareStatement(query);
 			ps.setInt(1,Integer.parseInt(value));
-			ResultSet rs= ps.executeQuery();
+			rs= ps.executeQuery();
 			while(rs!=null && rs.next()){
 				ProductVO p = new ProductVO();
 				p.setProductId(rs.getLong("productid"));
@@ -245,9 +260,13 @@ catch(Exception e){
 			
 			
 		}
-catch(Exception e){
-	e.printStackTrace();
-}
+		catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			rs.close();
+			ps.close();
+			con.close();
+		}
 		return results;
 	}
 }

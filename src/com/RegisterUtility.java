@@ -70,45 +70,51 @@ public class RegisterUtility {
 	else 
 		return false;	
 	}
-	public static UserVO verify(String  email, String pwd){
+	public static UserVO verify(String  email, String pwd) throws Exception{
 		//boolean check= false;
-		String userid=null;
 		UserVO u=new UserVO();
-		HashMap<String, String> results= new HashMap<String, String>();
+		Connection con = null;
+		PreparedStatement psmt=null;
+		ResultSet rs= null;
 		try{
-			Connection con = ConnectionUtility.getConnection();
+			con = ConnectionUtility.getConnection();
 			String query= "select pwd,userId,username from users where email= ?";
 			
-			PreparedStatement psmt= con.prepareStatement(query);
+			psmt= con.prepareStatement(query);
 			psmt.setString(1,email);
-			ResultSet rs= psmt.executeQuery();
+			rs= psmt.executeQuery();
 			if(rs.next()){
-			if(pwd.equals(rs.getString(1)))
-					{
-				u.setUserId(rs.getLong(2));
-				u.setName(email);
-				//results.put(rs.getString(3));
-				//System.out.println(rs.getString(3));
-				//results.put("name",rs.getString(3));
-			}
+				if(pwd.equals(rs.getString(1)))
+				{
+					u.setUserId(rs.getLong(2));
+					u.setName(email);
+					//results.put(rs.getString(3));
+					//System.out.println(rs.getString(3));
+					//results.put("name",rs.getString(3));
+				}
 			}
 		}
-catch(Exception e){
-	e.printStackTrace();
-}
-		
-		
+		catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			rs.close();
+			psmt.close();
+			con.close();
+		}
 		return  u;
 	}
-	public static UserVO getUser(long userId){
+	public static UserVO getUser(long userId) throws Exception{
 		UserVO u = new UserVO();
+		Connection con = null;
+		PreparedStatement psmt=null;
+		ResultSet rs= null;
 		try{
-			Connection con = ConnectionUtility.getConnection();
+			con = ConnectionUtility.getConnection();
 			String query= "select * from users where userid=?";
 			
-			PreparedStatement psmt= con.prepareStatement(query);
+			psmt= con.prepareStatement(query);
 			psmt.setLong(1,userId);
-			ResultSet rs= psmt.executeQuery();
+			rs= psmt.executeQuery();
 			if(rs!=null && rs.next()){
 				u.setName(rs.getString("username"));
 				u.setEmail(rs.getString("email"));
@@ -120,6 +126,10 @@ catch(Exception e){
 		}
 		catch(Exception e){
 			e.printStackTrace();
+		}finally{
+			rs.close();
+			psmt.close();
+			con.close();
 		}
 		return u;
 	}
