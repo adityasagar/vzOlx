@@ -65,7 +65,7 @@ public class ProductUtility {
 		Session session = Session.getDefaultInstance(properties);
 		MimeMessage message= new MimeMessage(session);
 		try {
-			message.setFrom(new InternetAddress("Verizon_Employee_Classifieds@gmail.com"));
+			message.setFrom(new InternetAddress("VerizonEmployeeClassifieds@gmail.com"));
 		
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 		message.setSubject("VZ Classified");
