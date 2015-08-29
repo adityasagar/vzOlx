@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Properties;
@@ -16,15 +17,18 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class ProductUtility {
-	public static ProductVO getProduct( long value){
+	public static ProductVO getProduct( long value) throws Exception{
 		//ArrayList<ProductVO> results= new ArrayList<ProductVO>();
 		ProductVO p = new ProductVO();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try{
-			Connection con=ConnectionUtility.getConnection();
+			con=ConnectionUtility.getConnection();
 			String query="Select * from products where productid=? ";
-			PreparedStatement ps= con.prepareStatement(query);
+			ps= con.prepareStatement(query);
 			ps.setLong(1,value);
-			ResultSet rs= ps.executeQuery();
+			rs= ps.executeQuery();
 			while(rs!=null && rs.next()){
 				p.setProductId(rs.getLong("productid"));
 				p.setName(rs.getString("productname"));
@@ -42,9 +46,13 @@ public class ProductUtility {
 			
 			
 		}
-catch(Exception e){
-	e.printStackTrace();
-}
+		catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			rs.close();
+			ps.close();
+			con.close();
+		}
 		return p;
 	}
 	public static void sendEmail(ProductVO product,UserVO buyer,UserVO seller,String msg){
@@ -68,14 +76,16 @@ catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-	public static boolean productEntry(ProductVO p){
+	public static boolean productEntry(ProductVO p) throws Exception{
 		int rows=0;
 		boolean check=false;
+		Connection con = null;
+		PreparedStatement psmt= null;
 		try{
 			java.sql.Date sqlDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-			Connection con = ConnectionUtility.getConnection();
+			con = ConnectionUtility.getConnection();
 			String query= "insert into products(productname, category,hits, price,ownerid,description, reason, buydate ) values(?,?,?,?,?,?,?,?)";
-			PreparedStatement psmt= con.prepareStatement(query);
+			psmt= con.prepareStatement(query);
 			psmt.setString(1,p.getName() );
 			psmt.setString(2, p.getCategory());
 			psmt.setLong(3, 0);
@@ -93,18 +103,23 @@ catch(Exception e){
 		}
 		catch(Exception e){
 			e.printStackTrace();
+		}finally{
+			psmt.close();
+			con.close();
 		}
 			return check;
 		}
 	
 		
-	public static ArrayList<ProductVO> getCategoryResults( String value){
+	public static ArrayList<ProductVO> getCategoryResults( String value) throws Exception{
 		ArrayList<ProductVO> results= new ArrayList<ProductVO>();
 		ProductVO p = new ProductVO();
+		Connection con=null;
+		PreparedStatement ps=null;
 		try{
-			Connection con=ConnectionUtility.getConnection();
+			con=ConnectionUtility.getConnection();
 			String query="Select * from products where category= ? limit 30";
-			PreparedStatement ps= con.prepareStatement(query);
+			ps= con.prepareStatement(query);
 			ps.setString(1,value);
 			ResultSet rs= ps.executeQuery();
 			while(rs!=null && rs.next()){
@@ -125,10 +140,13 @@ catch(Exception e){
 			
 			
 		}
-catch(Exception e){
-	e.printStackTrace();
-}
-		return results;
+		catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			ps.close();
+			con.close();
+		}
+			return results;
 	}
 	
 	public static ArrayList<ProductVO> getSearchResults( String value){

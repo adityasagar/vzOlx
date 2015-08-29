@@ -8,31 +8,41 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class RegisterUtility {
-	public static UserVO getUserByEmail (String email){
+	public static UserVO getUserByEmail (String email) throws Exception{
 		UserVO u= new UserVO();
+		Connection con=null;
+		PreparedStatement psmt=null;
+		ResultSet rs=null;
 		try{
-			Connection con=ConnectionUtility.getConnection();
-		String query="select * from users where email=?";
-		PreparedStatement psmt= con.prepareStatement(query);
-		psmt.setString(1,u.getEmail());
-	ResultSet rs= psmt.executeQuery();
-	if(rs!=null && rs.next()){
-		u.setName(rs.getString("username"));
-		u.setEmail(rs.getString("email"));
-		u.setContact(rs.getString("phone"));
-		u.setUserId(rs.getLong("userid"));
-	}
+			con=ConnectionUtility.getConnection();
+			String query="select * from users where email=?";
+			psmt= con.prepareStatement(query);
+			psmt.setString(1,u.getEmail());
+			rs= psmt.executeQuery();
+			if(rs!=null && rs.next()){
+				u.setName(rs.getString("username"));
+				u.setEmail(rs.getString("email"));
+				u.setContact(rs.getString("phone"));
+				u.setUserId(rs.getLong("userid"));
+			}
 		}
 		catch(Exception e){
 			e.printStackTrace();
+		}finally{
+			rs.close();
+			psmt.close();
+			con.close();
 		}
 		return u;
 	}
 	
-	public static boolean signUp (UserVO u){
+	public static boolean signUp (UserVO u) throws Exception{
 	int rows=0;
+	Connection con =null;
+	PreparedStatement psmt= null;
+	PreparedStatement psmt1= null;
 	try{	
-		Connection con = ConnectionUtility.getConnection();
+		con = ConnectionUtility.getConnection();
 		/*String query= "insert into users(username, email, phone,pwd,joindate) values(?,?,?,?,?)";
 	
 	
@@ -49,17 +59,21 @@ public class RegisterUtility {
 		rows=psmt.executeUpdate();*/
 		String query= "create table users (UserName varchar(20), email varchar(50), Phone varchar(10), Pwd varchar(19), Joindate date, userid  INT(4) AUTO_INCREMENT PRIMARY KEY )";
 		System.out.println("fads--"+query);
-		PreparedStatement psmt= con.prepareStatement(query);
-		rows=psmt.executeUpdate();
+		psmt= con.prepareStatement(query);
+		psmt.execute();
 		System.out.println("rows"+rows);
 		String query1= "create table products(productid integer(10) auto_increment PRIMARY KEY , productname varchar(30), category varchar(20), hits INTEGER(5), price INTEGER ,ownerid INTEGER, soldto INTEGER, description varchar(150), reason varchar(5), buydate date, selldate date, imagelink varchar(100) );";
 		System.out.println("fads--"+query1);
-		PreparedStatement psmt1= con.prepareStatement(query1);
-		rows=psmt1.executeUpdate();
+		psmt1= con.prepareStatement(query1);
+		psmt1.execute();
 		System.out.println("rows"+rows);
 		}
 		catch(Exception e){
 			e.printStackTrace();
+		}finally{
+			psmt.close();
+			psmt1.close();
+			con.close();
 		}
 		
 	if(rows>0)
