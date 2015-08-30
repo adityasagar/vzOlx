@@ -71,7 +71,7 @@ public class ProductUtility {
 		message.setSubject("VZ Classified");
 		message.setText(msg);
 		Transport.send(message);
-		} catch (MessagingException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
