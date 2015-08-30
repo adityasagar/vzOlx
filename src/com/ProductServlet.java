@@ -124,7 +124,8 @@ public class ProductServlet extends HttpServlet {
 				}
 				UserVO seller= RegisterUtility.getUser(product.getOwnerId());
 				UserVO buyer= RegisterUtility.getUser(userid);
-				ProductUtility.sendEmail(product, buyer, seller, message);			
+				ProductUtility.sendEmail(product, buyer, seller, message);	
+				System.out.println("After MAil");
 				PrintWriter out = response.getWriter();
 				response.setContentType("text/html");
 		        response.setHeader("Cache-control", "no-cache, no-store");
