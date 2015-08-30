@@ -43,6 +43,10 @@ a.link{
 #det{
 	display:none;
 }
+#detHdr{
+	background: linear-gradient(#800000, #F00000 ); 
+	color:white;
+}
 </style>
 <script>
 var userId = '<%=userId %>';
