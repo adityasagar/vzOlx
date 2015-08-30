@@ -1,10 +1,10 @@
 applications :
 - name : vzOlx
-memory: 512M
-instance: 1
+memory: 1024M
+instance: 2
 path: dist/MyProj.war
 buildpack: https://github.com/cloudfoundry/java-buildpack
 services:
    [ MySql ]
 variant:
-blue-green
+blue
