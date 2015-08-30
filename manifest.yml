@@ -6,5 +6,3 @@ path: dist/MyProj.war
 buildpack: https://github.com/cloudfoundry/java-buildpack
 services:
    [ MySql ]
-variant:
-blue
