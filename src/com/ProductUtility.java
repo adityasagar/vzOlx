@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -60,11 +61,29 @@ public class ProductUtility {
 		String from=buyer.getEmail();
 		String host="smtp.gmail.com";
 		System.out.println(to+" ,"+from);
-		Properties properties = System.getProperties();
-		properties.setProperty("mail.smtp.host", host);
-		Session session = Session.getDefaultInstance(properties);
+		//Properties properties = System.getProperties();
+		//properties.setProperty("mail.smtp.host", host);
+		//Session session = Session.getDefaultInstance(properties);
+		//MimeMessage message= new MimeMessage(session);
+
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class",
+				"javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+
+		Session session = Session.getDefaultInstance(props,
+			new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication("username","password");
+				}
+			});
 		MimeMessage message= new MimeMessage(session);
+
 		try {
+			
 			message.setFrom(new InternetAddress("VerizonEmployeeClassifieds@gmail.com"));
 		
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
