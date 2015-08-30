@@ -78,16 +78,17 @@ public class RegisterUtility {
 		ResultSet rs= null;
 		try{
 			con = ConnectionUtility.getConnection();
-			String query= "select pwd,userId,username from users where email= ?";
+			String query= "select username,pwd,userId,username from users where email= ?";
 			
 			psmt= con.prepareStatement(query);
 			psmt.setString(1,email);
 			rs= psmt.executeQuery();
 			if(rs.next()){
-				if(pwd.equals(rs.getString(1)))
+				if(pwd.equals(rs.getString("pwd")))
 				{
-					u.setUserId(rs.getLong(2));
-					u.setName(email);
+					u.setUserId(rs.getLong("userId"));
+					u.setName(rs.getString("username"));
+					u.setEmail(email);
 					//results.put(rs.getString(3));
 					//System.out.println(rs.getString(3));
 					//results.put("name",rs.getString(3));
