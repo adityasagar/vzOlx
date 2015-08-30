@@ -1,6 +1,6 @@
 language: java
 script: ant main
-sudo: require
+sudo: true
 
    
    env:
