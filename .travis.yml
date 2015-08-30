@@ -1,12 +1,20 @@
 language: java
 script: ant main
 sudo: require
+
+   
+   env:
+  global:
+  - CF_APP=vzOlx
+  - CF_API=https://api.run.pivotal.io
+  - CF_USERNAME=adityasagar1992@gmail.com
+  - CF_ORGANIZATION=hack
+  - CF_SPACE=development
+  - secure: [CF_PASSWORD=[encrypted with Travis](http://docs.travis-ci.com/user/environment-variables/#Encrypted-Variables)]
+before_deploy: npm install -g cf-blue-green
 deploy:
-   edge: true
-   provider: cloudfoundry
-   username: adityasagar1992@gmail.com
-   password: 1992ashu
-   api: https://api.run.pivotal.io
-   organization: hack
-   space: development
+  provider: script
+  script: cf-blue-green-travis
+  on:
+    branch: vzOlx
    
