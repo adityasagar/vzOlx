@@ -52,6 +52,7 @@ public class RegisterServlet extends HttpServlet {
 				ArrayList<ProductVO> recentList= ProductUtility.getRecentResults("10");
 				request.setAttribute("mostViewList", mostViewList);
 				request.setAttribute("recentList", recentList);*/
+				request.setAttribute("message", "WELCOME! Please login to continue!");
 				request.getRequestDispatcher("index.jsp").include(request, response);
 			//request.getRequestDispatcher("Succes.html").include(request, response);
 			}else{ 
@@ -62,7 +63,7 @@ public class RegisterServlet extends HttpServlet {
 				String email=(String)request.getParameter("email");
 				String pwd=(String)request.getParameter("pwd");
 			UserVO  user=	RegisterUtility.verify(email, pwd);
-			if(user!=null){
+			if(user!=null && user.getUserId()>0){
 				//boolean loginFlag= true;
 				String userName=user.getName();
 				Long userid=user.getUserId();
@@ -77,6 +78,7 @@ public class RegisterServlet extends HttpServlet {
 				request.getRequestDispatcher("index.jsp").include(request, response);
 			}
 				else {
+					request.setAttribute("message", "ERROR! Please verify your login credentials!");
 					request.getRequestDispatcher("Error.html").include(request, response);
 			}
 			}
